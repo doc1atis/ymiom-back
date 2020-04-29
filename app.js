@@ -20,10 +20,16 @@ var usersRouter = require("./routes/users");
 
 const app = express();
 
-// SET CORS OPTIONS FOR HTT REQUEST
-// "http://localhost:3000"
+// SET CORS OPTIONS FOR HTTP REQUEST
+const whitelist = ["https://www.olgymiom.com", "http://localhost:3000"];
 const corsOptions = {
-  origin: "https://www.olgymiom.com",
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   optionsSuccessStatus: 200,
 };
 // view engine setup
