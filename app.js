@@ -23,7 +23,7 @@ const app = express();
 // SET CORS OPTIONS FOR HTT REQUEST
 // "http://localhost:3000"
 const corsOptions = {
-  origin: "https://olgymiom.com",
+  origin: "https://www.olgymiom.com",
   optionsSuccessStatus: 200,
 };
 // view engine setup
