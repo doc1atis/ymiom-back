@@ -21,8 +21,9 @@ var usersRouter = require("./routes/users");
 const app = express();
 
 // SET CORS OPTIONS FOR HTT REQUEST
+// "http://localhost:3000"
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "https://olgymiom.com",
   optionsSuccessStatus: 200,
 };
 // view engine setup
