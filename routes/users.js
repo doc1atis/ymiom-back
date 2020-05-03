@@ -9,4 +9,14 @@ router.get("/", function (req, res, next) {
 });
 router.post("/register", register);
 router.post("/login", authStrategy("local"), login);
+router.get("/uploads", authStrategy("jwt"), (req, res) => {
+  console.log(req.user);
+  res.status(200).json({ olgy: "koma" });
+});
+
+router.post("/uploads", authStrategy("jwt"), (req, res) => {
+  console.log(req.user);
+  res.status(200).json({ olgyta: "komate" });
+});
+
 module.exports = router;

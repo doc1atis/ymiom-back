@@ -4,6 +4,28 @@ const userSchema = new mongoose.Schema({
   // ALL THE PROPERTIES OF THE USER
   username: { type: String, required: "email is required" },
   password: { type: String, required: "password is required" },
+  // ARRAY OF OBJECT IDs REFERRING TO SONGS
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Song",
+    },
+  ],
+  // ARRAY OF OBJECT IDs REFFERING TO PLAYLIST
+  playlist: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Playlist",
+    },
+  ],
+  // ARRAY OF OBJECT IDs REFFERING TO SONG
+
+  uploads: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Song",
+    },
+  ],
 });
 
 userSchema.methods.generateToken = function () {

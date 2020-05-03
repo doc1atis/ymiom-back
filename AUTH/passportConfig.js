@@ -22,19 +22,22 @@ const localLogin = new LocalStrategy(
 );
 // jwt strategy starts here
 const jwtOptions = {
-  // TELL PASSPORT WHERE TO GET THE TOKEN
+  // TELL PASSPORT FROM WHICH HEADER TO GET THE TOKEN
   jwtFromRequest: ExtractJwt.fromHeader("authorization-x-token"),
-  // USE THE SECRET KEY TO KNOW IT'S COMING FROM YOU
+  // USE THE SECRET KEY TO KNOW THE TOKEN IS COMING FROM YOU,AND WAS NOT MODIFIED
   secretOrKey: process.env.JWT_SECRET,
 };
 const jwtLogin = new JwtStrategy(jwtOptions, async function (payload, done) {
   try {
+    // THAT'S HOW PASSPORT KNOWS ABOUT THE USER--->DB QUERY
     const user = await User.findById(payload.sub);
     if (user) {
+      // IT ADDS THE USER AS A PROPERTY TO THE req OBJECT
       return done(null, user);
     }
     done(null, false);
   } catch (error) {
+    // HANDLE DATABASE ERROR HERE
     console.log("OLgy passport error is: ", error);
     done(error, false);
   }
