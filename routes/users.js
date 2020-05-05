@@ -11,6 +11,7 @@ const login = require("../AUTH/login");
 // REFER TO THE PRE-CREATED BUCKET
 // TRY TO GET THE BUCKET INSTEAD AND LOOP OVER ALL BUCKET TO GET THE ONE YOU WANT. --> IF NOT EXIST,EC2 IS NOT HEALTHY
 const BUCKET_NAME = "miom-bucket";
+console.log(AWS.config.credentials);
 
 // CONFIGURE S3 AUTH
 const s3Auth = new AWS.S3({
