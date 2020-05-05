@@ -14,3 +14,5 @@ const songSchema = new mongoose.Schema({
     ref: "Album", // THE AUTHOR CLASS
   },
 });
+
+module.exports = mongoose.model("Song", songSchema);

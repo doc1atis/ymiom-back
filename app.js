@@ -37,8 +37,12 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
 // USE CORS FOR HTT REQUEST
-app.use(cors(corsOptions));
-
+// corsOptions
+const des = {
+  origin: "http://localhost:3000",
+  optionsSuccessStatus: 200,
+};
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
