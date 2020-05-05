@@ -8,15 +8,14 @@ const authStrategy = require("../AUTH/passportConfig");
 const register = require("../AUTH/register");
 const login = require("../AUTH/login");
 // TRY TO SEE IF ERROR OCCURS WHILE GETTING CREDENTIALS. -->EC2 is not healthy
-const { accessKeyId, secretAccessKey } = AWS.config.credentials;
 // REFER TO THE PRE-CREATED BUCKET
 // TRY TO GET THE BUCKET INSTEAD AND LOOP OVER ALL BUCKET TO GET THE ONE YOU WANT. --> IF NOT EXIST,EC2 IS NOT HEALTHY
 const BUCKET_NAME = "miom-bucket";
 
 // CONFIGURE S3 AUTH
 const s3Auth = new AWS.S3({
-  accessKeyId,
-  secretAccessKey,
+  accessKeyId: AWS.config.credentials.accessKeyId,
+  secretAccessKey: AWS.config.credentials.secretAccessKey,
 });
 // CREATE THE UPLOAD OBJECT
 // serverSideEncryption: "AES256",
