@@ -9,7 +9,6 @@ const register = require("../AUTH/register");
 const login = require("../AUTH/login");
 // TRY TO SEE IF ERROR OCCURS WHILE GETTING CREDENTIALS. -->EC2 is not healthy
 const { accessKeyId, secretAccessKey } = AWS.config.credentials;
-
 // REFER TO THE PRE-CREATED BUCKET
 // TRY TO GET THE BUCKET INSTEAD AND LOOP OVER ALL BUCKET TO GET THE ONE YOU WANT. --> IF NOT EXIST,EC2 IS NOT HEALTHY
 const BUCKET_NAME = "miom-bucket";
@@ -89,16 +88,18 @@ router.get("/beka/:key", (req, res) => {
   const s3Stream = s3Auth.getObject(params).createReadStream();
   s3Stream.on("error", (err) => {
     // ERROR OCCURS TRYING TO GET THE FILE TO CREATE THE STREAM,THIS WILL RUN
-    console.log("OLGYYYYYYYYYYYYYYY ERROR GETTIN FILE YEAHHHHHHHH EXPRESSSS");
-    console.log("OLGY STAKKKKKKKKKK: ", err.stack);
-    res.send(err);
+    res.end(err);
   });
 
   // THIS WILL NOT RUN IF THERE IS AN ERROR GETTING THE FILE
-  s3Stream.pipe(res).on("error", (err) => {
+  s3Stream.pipe(res);
+  // res = writer
+  res.on("error", (err) => {
     // IF THERE IS AN ERROR STREAMING THE FILE THIS WILL RUN
-    console.log("OLGY ERRORRRRRRRR PIPINGGGGGGGGG YEAHHHH MAN EXPRESSSSSS");
-    res.status(400).json({ err });
+    res.end(err);
+  });
+  res.on("unpipe", () => {
+    res.end();
   });
 });
 

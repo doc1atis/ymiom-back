@@ -21,15 +21,8 @@ var usersRouter = require("./routes/users");
 const app = express();
 
 // SET CORS OPTIONS FOR HTTP REQUEST
-const whitelist = ["https://www.olgymiom.com", "http://localhost:3000"];
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: process.env.MIOM_ORIGIN || "https://www.olgymiom.com",
   optionsSuccessStatus: 200,
 };
 // view engine setup
@@ -38,11 +31,8 @@ app.set("view engine", "jade");
 
 // USE CORS FOR HTT REQUEST
 // corsOptions
-const des = {
-  origin: "http://localhost:3000",
-  optionsSuccessStatus: 200,
-};
-app.use(cors());
+
+app.use(cors(corsOptions));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
