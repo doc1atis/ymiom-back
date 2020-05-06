@@ -21,9 +21,15 @@ var usersRouter = require("./routes/users");
 const app = express();
 
 // SET CORS OPTIONS FOR HTTP REQUEST
-const ORIGIN = "https://www.olgymiom.com";
+const ORIGIN = () => {
+  if (process.env.MIOM_ORIGIN_LOCAL) {
+    return process.env.MIOM_ORIGIN_LOCAL;
+  }
+  return "https://www.olgymiom.com";
+};
+
 const corsOptions = {
-  origin: ORIGIN,
+  origin: ORIGIN(),
   optionsSuccessStatus: 200,
 };
 // view engine setup

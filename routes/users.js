@@ -1,4 +1,5 @@
 const express = require("express");
+const FileType = require("file-type");
 const Song = require("../models/Song");
 const uuid = require("uuid-random");
 const multer = require("multer");
@@ -88,7 +89,11 @@ router.get("/beka/:key", (req, res) => {
     // ERROR OCCURS TRYING TO GET THE FILE TO CREATE THE STREAM,THIS WILL RUN
     res.end(err);
   });
-
+  let dataContentType;
+  s3Stream.on("data", async (data) => {
+    // DATA IS A BUFFER
+    dataContentType = await FileType.fromBuffer(data);
+  });
   // THIS WILL NOT RUN IF THERE IS AN ERROR GETTING THE FILE
   s3Stream.pipe(res);
   // res = writer
@@ -97,7 +102,12 @@ router.get("/beka/:key", (req, res) => {
     res.end(err);
   });
   res.on("pipe", () => {
-    res.set({ "Content-Type": "audio/mpeg" });
+    // MAKE SURE MOBILE BROWSER CAN PLAY OR SHOW THE FILE BY KNOWING IT'S TYPE.
+    if (dataContentType) {
+      res.set({
+        "Content-Type": dataContentType.mime,
+      });
+    }
   });
   res.on("unpipe", () => {
     res.end();
