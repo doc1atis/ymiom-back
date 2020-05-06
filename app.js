@@ -4,7 +4,7 @@ const createError = require("http-errors");
 require("dotenv").config();
 
 // CONNECT TO MONGO DB ATLAS IN THE CLOUD
-require("./DB/dbConnection")();
+// require("./DB/dbConnection")();
 
 // IMPORT CORS TO ALLOW HTTP REQUEST
 const cors = require("cors");
