@@ -14,8 +14,9 @@ const login = require("../AUTH/login");
 const BUCKET_NAME = "miom-bucket";
 // CONFIGURE S3 AUTH
 const s3Auth = new AWS.S3({
-  accessKeyId: process.env.aws_access_key_id,
-  secretAccessKey: process.env.aws_secret_access_key,
+  accessKeyId: AWS.config.credentials.accessKeyId,
+  secretAccessKey: AWS.config.credentials.secretAccessKey,
+  httpOptions: { timeout: 3000 },
 });
 // CREATE THE UPLOAD OBJECT
 // serverSideEncryption: "AES256",
@@ -78,42 +79,53 @@ router.post("/up", async (req, res) => {
   }
 });
 // jfvfhbfkbfbfjfbhkfbfjbhjfbjfjbvfkbkfbvfbfjvfkvvdvkdvdvdmbvdvnbdnmvndmvnmdnvmdnmvdmvmdvdmvdmvdmvd
-router.get("/beka/:key", (req, res) => {
+router.get("/sound/:key", (req, res) => {
   const params = {
     Bucket: BUCKET_NAME,
     Key: req.params.key,
   };
-
-  const s3Stream = s3Auth.getObject(params).createReadStream();
-  s3Stream.on("error", (err) => {
-    // ERROR OCCURS TRYING TO GET THE FILE TO CREATE THE STREAM,THIS WILL RUN
-    res.end(err);
+  const stream = s3Auth.getObject(params).createReadStream();
+  stream.on("error", (err) => {
+    stream.end();
+    console.log(err);
   });
-  let dataContentType;
-  s3Stream.on("data", async (data) => {
-    // DATA IS A BUFFER
-    dataContentType = await FileType.fromBuffer(data);
+  res.set({
+    "Content-Type": "audio/mpeg",
+    // ETag: "d0223dc146c5eb5a345a8aabc0bf7272",
+    "Accept-Ranges": "bytes",
   });
-  // THIS WILL NOT RUN IF THERE IS AN ERROR GETTING THE FILE
-  s3Stream.pipe(res);
-  // res = writer
-  res.on("error", (err) => {
-    // IF THERE IS AN ERROR STREAMING THE FILE THIS WILL RUN
-    res.end(err);
-  });
-  res.on("pipe", () => {
-    // MAKE SURE MOBILE BROWSER CAN PLAY OR SHOW THE FILE BY KNOWING IT'S TYPE.
-    if (dataContentType) {
+  stream
+    .pipe(res)
+    .on("error", (err) => {
+      console.log("error piping");
+    })
+    .on("close", () => {
+      console.log("done olgy");
+      res.end();
+    });
+});
+router.get("/image/:key", (req, res) => {
+  const params = {
+    Bucket: BUCKET_NAME,
+    Key: req.params.key,
+  };
+  s3Auth.getObject(params, (err, data) => {
+    if (err) {
+      console.log(err.stack);
+      res.json({ getting: "olgybuk" });
+    } else {
       res.set({
-        "Content-Type": dataContentType.mime,
+        "Content-Type": data.ContentType,
+        ETag: data.ETag,
+        "Content-Length": data.ContentLength,
+        "Accept-Ranges": data.AcceptRanges,
+        Metadata: data.Metadata,
       });
+      res.write(data.Body);
+      res.end();
     }
   });
-  res.on("unpipe", () => {
-    res.end();
-  });
 });
-
 // best approach, embed all song inside of and album
 
 /**
