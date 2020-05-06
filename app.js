@@ -28,7 +28,7 @@ const ORIGIN = () => {
 };
 
 const corsOptions = {
-  origin: "http://node-express-env.eba-vp93zyhu.us-east-1.elasticbeanstalk.com",
+  origin: ORIGIN(),
   optionsSuccessStatus: 200,
 };
 // view engine setup
