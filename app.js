@@ -21,8 +21,8 @@ const app = express();
 
 // SET CORS OPTIONS FOR HTTP REQUEST
 const ORIGIN = () => {
-  if (process.env.MIOM_ORIGIN_LOCAL) {
-    return process.env.MIOM_ORIGIN_LOCAL;
+  if (process.env.MIOM_ORIGIN_CALL) {
+    return process.env.MIOM_ORIGIN_CALL;
   }
   return "https://www.olgymiom.com";
 };
