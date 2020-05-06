@@ -26,7 +26,7 @@ const ORIGIN = () => {
   }
   return "https://www.olgymiom.com";
 };
-
+console.log("OLGY APPPPPP ORIGIN IS: ", ORIGIN());
 const corsOptions = {
   origin: ORIGIN(),
   optionsSuccessStatus: 200,
