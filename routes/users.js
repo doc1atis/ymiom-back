@@ -96,6 +96,9 @@ router.get("/beka/:key", (req, res) => {
     // IF THERE IS AN ERROR STREAMING THE FILE THIS WILL RUN
     res.end(err);
   });
+  res.on("pipe", () => {
+    res.set({ "Content-Type": "audio/mpeg" });
+  });
   res.on("unpipe", () => {
     res.end();
   });
