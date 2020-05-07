@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     if (user) {
       return res.status(400).json({
         success: false,
-        message: "user is already registered please login",
+        message: "user is already registered please logins",
         alreadyRegistered: true,
       });
     }
