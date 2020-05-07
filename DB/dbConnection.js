@@ -7,7 +7,7 @@ module.exports = async function () {
     });
     console.log("Connected to MONGO DB Olgy");
   } catch (error) {
-    console.log("need to fixss");
+    console.log("need to fixsssssss");
     console.log("there was an error connected to mongoDB olgy: ", error);
   }
 };
