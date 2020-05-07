@@ -5,7 +5,7 @@ module.exports = async function () {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("Connected to MONGO DB Olgy");
+    console.log("Connected to MONGO DB Olgy--- awseb-AWSEB-1EG5ZNVG8EDM8");
   } catch (error) {
     console.log(
       "OLGY THERE WAS AN ERROR CONNECTING TO MONGODB OLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL==========OLLLLLLLLLLLLLL"
