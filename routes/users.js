@@ -14,8 +14,8 @@ const login = require("../AUTH/login");
 const BUCKET_NAME = "miom-bucket";
 // CONFIGURE S3 AUTH
 const s3Auth = new AWS.S3({
-  accessKeyId: process.env.aws_access_key_id,
-  secretAccessKey: process.env.aws_secret_access_key,
+  accessKeyId: AWS.config.credentials.accessKeyId,
+  secretAccessKey: AWS.config.credentials.secretAccessKey,
   httpOptions: { timeout: 3000 },
 });
 // CREATE THE UPLOAD OBJECT
