@@ -3,9 +3,17 @@ const createError = require("http-errors");
 // MAKE ENV_VARIABLE ACCESSIBLE
 require("dotenv").config();
 
-// CONNECT TO MONGO DB ATLAS IN THE CLOUD
-require("./DB/dbConnection")();
-
+// POOL IS CREATED HERE----DB CONNECTION
+const pool = require("./DB/dbConnection");
+pool.getConnection((err, connection) => {
+  if (err) {
+    console.log("fail to get connection olgy");
+  } else {
+    console.log("connection retrieved");
+    connection.release();
+    console.log("connection realease");
+  }
+});
 // IMPORT CORS TO ALLOW HTTP REQUEST
 const cors = require("cors");
 
@@ -14,9 +22,9 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
-// IMPORT ALL APP ROUTERS
-var usersRouter = require("./routes/users");
-
+// ----------------------IMPORT ALL APP ROUTERS---------------------------
+const usersRouter = require("./routes/users");
+const songsRouter = require("./routes/songs");
 const app = express();
 
 // SET CORS OPTIONS FOR HTTP REQUEST
@@ -26,7 +34,6 @@ const ORIGIN = () => {
   }
   return "https://www.olgymiom.com";
 };
-console.log("OLGY APPPPPP ORIGIN IS: ", ORIGIN());
 const corsOptions = {
   origin: ORIGIN(),
   optionsSuccessStatus: 200,
@@ -37,17 +44,18 @@ app.set("view engine", "jade");
 
 // USE CORS FOR HTT REQUEST
 // corsOptions
-// =================================================================================
+// ------------------------------SERVE STATIC FILE FOLDER---------------------------
 app.use(express.static(path.join(__dirname, "build")));
 app.use(cors(corsOptions));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-// USE ALL APP ROUTERS, --> MUST START WITH /api
+// ---------------USE ALL APP ROUTERS, --> MUST START WITH /api------------------
 app.use("/api/users", usersRouter);
+app.use("/api/songs", songsRouter);
 
-// SERVE STATIC FILE
+// ---------------------SERVE STATIC FILE ROUTES--------------------------------
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });

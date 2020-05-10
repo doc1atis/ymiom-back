@@ -1,40 +1,9 @@
 const express = require("express");
 const FileType = require("file-type");
-const Song = require("../models/Song");
-const uuid = require("uuid-random");
-const multer = require("multer");
-const multerS3 = require("multer-s3");
-const AWS = require("aws-sdk");
 const authStrategy = require("../AUTH/passportConfig");
 const register = require("../AUTH/register");
 const login = require("../AUTH/login");
-// TRY TO SEE IF ERROR OCCURS WHILE GETTING CREDENTIALS. -->EC2 is not healthy
-// REFER TO THE PRE-CREATED BUCKET
-// TRY TO GET THE BUCKET INSTEAD AND LOOP OVER ALL BUCKET TO GET THE ONE YOU WANT. --> IF NOT EXIST,EC2 IS NOT HEALTHY
-const BUCKET_NAME = "miom-bucket";
-// CONFIGURE S3 AUTH
-const s3Auth = new AWS.S3({
-  accessKeyId: process.env.aws_access_key_id,
-  secretAccessKey: process.env.aws_secret_access_key,
-  httpOptions: { timeout: 3000 },
-});
-// CREATE THE UPLOAD OBJECT
-// serverSideEncryption: "AES256",
-const upload = multer({
-  storage: multerS3({
-    s3: s3Auth,
-    bucket: BUCKET_NAME,
-    serverSideEncryption: "AES256",
-    contentType: multerS3.AUTO_CONTENT_TYPE,
-    metadata: function (req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key: function (req, file, cb) {
-      // THIS IS THE KEY OF THE FILE
-      cb(null, uuid() + file.originalname);
-    },
-  }),
-});
+
 /* GET users listing. */
 const router = express.Router();
 router.get("/", function (req, res, next) {
@@ -46,16 +15,6 @@ router.get("/uploads", (req, res) => {
   res.status(200).json({ olgy: "koma" });
 });
 
-router.post("/uploads", upload.single("cover-image"), (req, res) => {
-  try {
-    console.log(req.file);
-  } catch (error) {
-    console.log("olgy Error: ", error);
-  }
-
-  // console.log(req.user);
-  res.status(200).json({ olgyta: "komate" });
-});
 router.post("/test", async (req, res) => {
   console.log(req.body);
   try {
